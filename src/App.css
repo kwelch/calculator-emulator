@@ -2,27 +2,21 @@
   text-align: center;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+.App table {
+  padding: .5rem;
+  margin: 2rem auto;
+  font-size: 2rem;
+
+  background-color: white;
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+.App table td {
+  padding: .5rem;
 }
 
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.calculator__display {
+  font-size: 2.5rem;
+  text-align: right;
+  border: 0;
+  padding: .4rem .1rem;
 }
