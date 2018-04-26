@@ -3,7 +3,7 @@ import './App.css';
 import Button from './Button';
 
 const hasInvalidCharacters = value =>
-  ![...value].every(char => Array.from('1234567890+-/*').includes(char));
+  ![...value].every(char => Array.from('1234567890+-/*.').includes(char));
 
 class App extends Component {
   state = {
