@@ -1,13 +1,31 @@
 import React, { Component } from 'react';
 import './App.css';
+import Button from './Button';
+
+const hasInvalidCharacters = value =>
+  ![...value].every(char => Array.from('1234567890+-/*').includes(char));
 
 class App extends Component {
   state = {
     displayValue: '',
   };
 
+  getRows = () => [
+    [
+      { value: 'clear', colSpan: '3', onClick: this.handleClear },
+      { value: '%' },
+    ],
+    [{ value: '7' }, { value: '8' }, { value: '9' }, { value: '*' }],
+    [{ value: '4' }, { value: '5' }, { value: '6' }, { value: '-' }],
+    [{ value: '1' }, { value: '2' }, { value: '3' }, { value: '+' }],
+    [
+      { value: '0', colSpan: '3' },
+      { value: '=', onClick: this.runCalculation },
+    ],
+  ];
+
   updateDisplay = evt => {
-    let value = evt.target.innerText
+    let value = evt.target.innerText;
     this.setState(prevState => ({
       displayValue: `${prevState.displayValue}${value}`,
     }));
@@ -15,19 +33,32 @@ class App extends Component {
 
   handleInputChange = evt => {
     let value = evt.target.value;
+    if (hasInvalidCharacters(value)) {
+      console.log('invalid character entered. Nice try! :D');
+      return null;
+    }
     this.setState({
       displayValue: value,
     });
   };
 
-  runCalculation = () => {
-    
-  }
+  handleClear = () => {
+    this.setState({
+      displayValue: '',
+    });
+  };
+
+  runCalculation = evt => {
+    evt.preventDefault();
+    this.setState(prevState => ({
+      displayValue: eval(prevState.displayValue),
+    }));
+  };
 
   render() {
     return (
       <div className="App">
-        <form>
+        <form onSubmit={this.runCalculation}>
           <table>
             <thead>
               <tr>
@@ -41,60 +72,9 @@ class App extends Component {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td colSpan="3">Clear</td>
-                <td>%</td>
-              </tr>
-              <tr>
-                <td>
-                  <span onClick={this.updateDisplay}>7</span>
-                </td>
-                <td>
-                  <span onClick={this.updateDisplay}>8</span>
-                </td>
-                <td>
-                  <span onClick={this.updateDisplay}>9</span>
-                </td>
-                <td>
-                  <span onClick={this.updateDisplay}>x</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span onClick={this.updateDisplay}>4</span>
-                </td>
-                <td>
-                  <span onClick={this.updateDisplay}>5</span>
-                </td>
-                <td>
-                  <span onClick={this.updateDisplay}>6</span>
-                </td>
-                <td>
-                  <span onClick={this.updateDisplay}>-</span>
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <span onClick={this.updateDisplay}>1</span>
-                </td>
-                <td>
-                  <span onClick={this.updateDisplay}>2</span>
-                </td>
-                <td>
-                  <span onClick={this.updateDisplay}>3</span>
-                </td>
-                <td>
-                  <span onClick={this.updateDisplay}>+</span>
-                </td>
-              </tr>
-              <tr>
-                <td colSpan="3">
-                  <span onClick={this.updateDisplay}>0</span>
-                </td>
-                <td>
-                  <span onClick={this.runCalculation}>=</span>
-                </td>
-              </tr>
+              {this.getRows().map((row, row_idx) => (
+                <tr key={`row_${row_idx}`}>{row.map((props) => (<Button key={props.value} onClick={this.updateDisplay} {...props} />))}</tr>
+              ))}
             </tbody>
           </table>
         </form>
